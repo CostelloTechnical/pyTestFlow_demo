@@ -21,6 +21,10 @@ config.read(CONFIG_PATH)
 
 EXPECTED_MODEL = config.get("PSU", "model")
 
+# ------------------------------------------------------------
+# Helper functions
+# ------------------------------------------------------------
+
 def get_user_serial_number() -> str:
     user_response = ptf_context.locals.get("_pre_uut_user_response")
     if not isinstance(user_response, dict):
@@ -41,6 +45,9 @@ def get_psu():
         raise RuntimeError("psu_handle not initialized")
     return psu
 
+# ------------------------------------------------------------
+# Startup Steps
+# ------------------------------------------------------------
 
 @action_step(name="init_daq", store_as="daq_handle")
 def init_daq():
@@ -55,6 +62,10 @@ def init_psu():
     psu.open()
     return psu
 
+# ------------------------------------------------------------
+# Main Test Steps
+# ------------------------------------------------------------
+
 @action_step(name="enable_output")
 def enable_output():
     get_psu().set_output(True)
@@ -65,12 +76,9 @@ def check_output_on():
     return get_psu().get_output_status()
 
 
-@pass_fail_step(name="check_serial_number")
+@string_check_step(name="check_serial_number", expected=get_user_serial_number, match="exact")
 def check_serial_number():
-    expected = get_user_serial_number()
-    actual   = get_psu().get_serial_number()
-    print(f"Expected SN: {expected} | Actual SN: {actual}")
-    return actual == expected
+    return get_psu().get_serial_number()
 
 
 @string_check_step(name="check_model", expected=EXPECTED_MODEL, match="exact")
@@ -111,6 +119,9 @@ def measure_3VDC():
 def disable_output():
     get_psu().set_output(False)
 
+# ------------------------------------------------------------
+# Cleanup Steps
+# ------------------------------------------------------------
 
 @action_step(name="close_daq")
 def close_daq():
@@ -128,7 +139,7 @@ def close_psu():
 
 def main_sequence() -> TestSequence:
     return TestSequence(
-        name="BasicSequence",
+        name="demo_sequence",
         setup_steps=[init_daq, init_psu],
         main_steps=[
             check_serial_number,
