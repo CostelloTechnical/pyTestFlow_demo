@@ -10,7 +10,7 @@ from pytestflow.steps.string_check import string_check_step
 from pytestflow.steps.pass_fail import pass_fail_step
 
 # ------------------------------------------------------------
-# Prepare driver folder and config access
+# Prepare Driver Folder and Config Access
 # ------------------------------------------------------------
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -26,7 +26,7 @@ config.read(CONFIG_PATH)
 EXPECTED_MODEL = config.get("PSU", "model")
 
 # ------------------------------------------------------------
-# Helper functions
+# Helper Functions
 # ------------------------------------------------------------
 
 def get_user_serial_number() -> str:
