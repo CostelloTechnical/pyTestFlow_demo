@@ -9,6 +9,10 @@ from pytestflow.steps.numeric_limit import numeric_limit_step
 from pytestflow.steps.string_check import string_check_step
 from pytestflow.steps.pass_fail import pass_fail_step
 
+# ------------------------------------------------------------
+# Prepare driver folder and config access
+# ------------------------------------------------------------
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 from drivers.daq import NIDAQ as DAQ
